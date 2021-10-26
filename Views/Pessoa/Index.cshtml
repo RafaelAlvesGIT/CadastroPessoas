@@ -1,0 +1,206 @@
+﻿@model CadastroPessoas.Models.Pessoa;
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+@if (TempData["warning"] != null || TempData["success"] != null)
+{
+    <div class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="toast-header">
+            <img src="..." class="rounded mr-2" alt="...">
+            <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="toast-body">
+            @TempData["warning"] @TempData["success"]
+        </div>
+    </div>
+}
+<div align="center">
+    <div class="row">
+        <div class="col-md-3">
+            <button onclick="ControleAba('abaPessoaFisica')" class="btn btn-primary">Pessoa Física</button>
+        </div>
+        <div class="col-md-3">
+            <button onclick="ControleAba('abaPessoaJuridica')" class="btn btn-primary">Pessoa Jurídica</button>
+        </div>
+    </div>
+</div>
+<br />
+<div id="abaPessoaFisica" class="form-group aba">
+    <h4>Pessoa Fisica</h4>
+
+    <form action="~/PessoaFisica/CadastrarPessoa" method="post">
+        <div class="row">
+            <div class="col-md-3">
+                <label for="Nome">Nome*:</label>
+                <input type="text" id="Nome" name="Nome" required class="form-control" />
+            </div>
+            <div class="col-md-3">
+                <label for="cpf">Cpf*:</label>
+                <input type="text" id="Cpf" name="Cpf" required class="form-control" />
+            </div>
+            <div class="col-md-3">
+                <label for="DataNascimento">Data Nascimento:</label>
+                <input type="date" id="DataNascimento" name="DataNascimento" value="00/00/0000" class="form-control" />
+            </div>
+            <div class="col-md-2">
+                <label for="sexo">Sexo:</label>
+                <select id="sexo" name="Sexo" class="form-control">
+                    @if (Model.ListaSexo != null)
+                    {
+                        @foreach (var sexo in Model.ListaSexo)
+                        {
+                            <option value="@sexo.Id">@sexo.Descricao</option>
+                        }
+                    }
+                </select>
+            </div>
+            <div class="col-md-3">
+                <label for="Rg">Rg:</label>
+                <input type="text" id="Rg" name="Rg" class="form-control" />
+            </div>
+            <div class="col-md-3">
+                <label for="Endereco">Endereço:</label>
+                <input type="text" id="Endereco" name="Endereco" class="form-control" />
+            </div>
+            <div class="col-md-3">
+                <label for="Telefone">Telefone:</label>
+                <input type="text" id="Telefone" name="Telefone" class="form-control" />
+            </div>
+            <div class="col-md-3">
+                <label for="Email">E-mail:</label>
+                <input type="text" id="Email" name="Email" class="form-control" />
+            </div>
+        </div>
+        <br />
+        <div class="row form-group">
+            <div class="col-md-3">
+                <button type="submit" class="form-control btn btn-success">Cadastrar</button>
+            </div>
+            <div class="col-md-3">
+                <button type="reset" class="form-control btn btn-danger">Limpar</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+<div id="abaPessoaJuridica" class="form-group aba" hidden>
+    <h4>Pessoa Juridica</h4>
+    <form action="/PessoaJuridica/CadastrarPessoaJuridica" method="post">
+        <div class="row">
+            <div class="col-md-3">
+                <label for="Cnpj">Cnpj*:</label>
+                <input type="text" id="Cnpj" name="Cnpj" required class="form-control" />
+            </div>
+            <div class="col-md-3">
+                <label for="RazaoSocial">Razão Social*:</label>
+                <input type="text" id="RazaoSocial" required name="RazaoSocial" class="form-control" />
+            </div>
+            <div class="col-md-3">
+                <label for="NomeFantasia">Nome Fantasia:</label>
+                <input type="text" id="NomeFantasia" name="NomeFantasia" class="form-control" />
+            </div>
+            <div class="col-md-3">
+                <label for="Endereco">Endereço:</label>
+                <input type="text" id="Endereco" name="Endereco" class="form-control" />
+            </div>
+            <div class="col-md-3">
+                <label for="Telefone">Telefone:</label>
+                <input type="tel" id="Telefone" name="Telefone" class="form-control" />
+            </div>
+            <div class="col-md-3">
+                <label for="Email">E-mail:</label>
+                <input type="email" id="Email" name="Email" class="form-control" />
+            </div>
+        </div>
+        <br />
+        <div class="row form-group">
+            <div class="col-md-3">
+                <button type="submit" class="form-control btn btn-success">Cadastrar</button>
+            </div>
+            <div class="col-md-3">
+                <button type="reset" class="form-control btn btn-danger">Limpar</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+<div>
+    <form action="~/Pessoa/Buscar" method="post">
+        <div class="row form-group">
+            <div class="col-md-9">
+                <input type="text" id="Busca" required name="Busca" placeholder="Buscar" class="form-control" />
+            </div>
+            <div class="col-md-3">
+                <button type="submit" class="form-control btn btn-primary">Buscar</button>
+            </div>
+        </div>
+    </form>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Nome</th>
+                <th>Cpf</th>
+                <th>Sexo</th>
+                <th>Data de Nascimento</th>
+                <th>Rg</th>
+                <th>Cnpj</th>
+                <th>Nome Fantasia</th>
+                <th>Razão Social</th>
+                <th>Endereço</th>
+                <th>Telefone</th>
+                <th>E-mail</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.ListaPessoaFisica != null)
+            {
+                @foreach (var PessoaFisica in Model.ListaPessoaFisica)
+                {
+                    <tr>
+                        <td>@PessoaFisica.Nome</td>
+                        <td>@PessoaFisica.Cpf</td>
+                        <td>@PessoaFisica.Sexo</td>
+                        <td>@PessoaFisica.DataNascimento</td>
+                        <td>@PessoaFisica.Rg</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>@PessoaFisica.Endereco</td>
+                        <td>@PessoaFisica.Telefone</td>
+                        <td>@PessoaFisica.Email</td>
+                    </tr>
+                }
+            }
+
+            @if (Model.ListaPessoaJuridica != null)
+            {
+                @foreach (var PessoaJuridica in Model.ListaPessoaJuridica)
+                {
+                    <tr>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>@PessoaJuridica.Cnpj</td>
+                        <td>@PessoaJuridica.NomeFantasia</td>
+                        <td>@PessoaJuridica.RazaoSocial</td>
+                        <td>@PessoaJuridica.Endereco</td>
+                        <td>@PessoaJuridica.Telefone</td>
+                        <td>@PessoaJuridica.Email</td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<style rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css"></style>
+<script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
+
+<script src="~/js/CadastroPessoa.js"></script>
